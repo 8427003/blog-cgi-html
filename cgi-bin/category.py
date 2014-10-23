@@ -73,9 +73,27 @@ def modifyInterface(cid):
 		result = {"status":-1,"message":'修改失败'}
 
 	print json.dumps(result)
-
 		
+def _getAllChildByParent(parent,category):
+	cids = _getCidByParent(parent)
+	children = []
+	for cid in cids:
+		ctg = r.hgetall("category:%s"%cid)
+		_getAllChildByParent(ctg['id'],ctg)	
+		children.append(ctg);
+	category['children'] = children
+	return category.get('children') 
 
+def getAllByParentInterface(parent,callback):
+	result = {"status":-1,"message":'添加失败'}
+	data = _getAllChildByParent(parent,{})
+	result = {"status":0,"data":data}
+        if callback : 
+	    print callback+"("+json.dumps(result)+");"
+        else:
+            print json.dumps(result)
+
+	
 def getByParentInterface(parent,callback):
 	result = {"status":-1,"message":'添加失败'}
 	cids = _getCidByParent(parent)
@@ -152,6 +170,7 @@ def main():
 		"getbycid":lambda:getByCidInterface(paramObj["cid"]),
 		"modify":lambda:modifyInterface(paramObj["cid"]),
 		"getbyparent":lambda:getByParentInterface(paramObj["parent"],paramObj.get('callback')),
+		"getallbyparent":lambda:getAllByParentInterface(paramObj["parent"],paramObj.get('callback')),
 		"delbycid":lambda:delInterface(paramObj["cid"])
 		
 	}[paramObj["type"]]()
