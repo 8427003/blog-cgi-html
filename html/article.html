@@ -1,0 +1,236 @@
+<DOCTYPE HTML>
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>文章管理</title>
+    <script type="text/javascript" charset="utf-8" src="js/jquery-1.10.2.min.js"></script>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugs/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugs/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="plugs/ueditor/lang/zh-cn/zh-cn.js"></script>
+</head>
+<body>
+<div class="container">
+<div class="row">
+	<div class="col-md-4">
+		<h1>文章管理</h1>
+	</div>
+</div>
+<form class="row">
+    <div class="col-md-4">
+	<div class="form-group">
+        	<label>选择分类:</label>
+        	<select id="js_parent" class="form-control">
+            		<option value="0" data-level="0">index</option>
+        	</select>
+	</div>
+        <div class="form-group">
+            <label>title：</label>
+            <input type="text" id="js_title" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>文章状态：</label>
+            <select id="js_state" class="form-control">
+                <option value="1" selected>发布</option>
+                <option value="2">暂存</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>排序：</label>
+            <input type="text" id="js_order" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>摘要：</label>
+            <textarea id="js_desc" class="form-control"></textarea>
+        </div>
+    	<div class="form-group">
+        	<input type="hidden" id="js_hot">
+        	<input type="hidden" id="js_createDate">
+		<input type="button"  class="btn btn-default btn-lg" value="提交" id="js_submit">
+    	</div>
+     </div>
+</form>
+</div>
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+<!--style给定宽度可以影响编辑器的最终宽度-->
+<script type="text/plain" id="myEditor" style="width:1000px;height:240px;">
+</script>
+<div> 
+    <h3 class="bg-warning" id="focush2"></h3>
+</div>
+
+</div>
+</div>
+</div>
+
+
+<script type="text/javascript">
+    //实例化编辑器
+    var um = UE.getEditor('myEditor');
+    um.addListener('blur',function(){
+        $('#focush2').html('编辑器失去焦点了')
+    });
+    um.addListener('focus',function(){
+        $('#focush2').html('')
+    });
+  
+    function getContent() {
+        return um.getContent();
+    }
+    function setContent(html){
+	if(html){
+		um.ready(function(){
+			UE.getEditor('myEditor').setContent(html);
+		});
+	}
+    }
+</script>
+<script>
+$(function(){
+
+    function _getFormData(){
+        var data = {};  
+
+        var level = $("#js_parent").find('option:selected').attr("data-level");
+
+        level = parseInt(level,10) + 1;
+
+        data["cid"] = $("#js_parent").val();
+        data["state"] = $("#js_state").val();
+        data["order"] = $("#js_order").val();
+        data["hot"] = $("#js_hot").val() || 0;
+        data["title"] = $("#js_title").val();
+        data["desc"] = $("#js_desc").val();
+        data["content"] = getContent(); 
+        data["createDate"] = $("#js_createDate").val() || new Date().getTime();
+        return data;
+    }
+    function submit(){
+        var data = _getFormData();
+	var aid = searchToParamObj()['aid'];
+	var url = (aid)? "/cgi-bin/article.py?type=modify&aid="+aid : "/cgi-bin/article.py?type=add"
+		 
+
+        $.ajax({
+            type:'POST',
+            url:url,
+            data:JSON.stringify(data),
+            dataType:"json",
+            success:function(data){
+                if(data && data.status == '0'){
+			if(aid){
+                    		alert("修改成功！");
+			}else{
+				alert("添加成功!");
+			}
+                }
+            },
+            error:function(){
+                alert("服务器繁忙，请稍后再试！");
+            }
+        });
+    }
+    function _initOptions(list,html,preLevel){
+        var preStr = "";
+        for(var i = 0; i < preLevel; i++){
+            preStr += "&nbsp;&nbsp;&nbsp;&nbsp;";   
+        }
+        for( var k in list){
+            html.push('<option value="'+list[k].id+'" data-level="'+list[k].level+'">'+preStr+'|----'+list[k].name+'</option>');
+            _initSubDom(list[k].id,html,preLevel);  
+        }
+
+
+
+    }       
+    function _initSubDom(pid,html,preLevel){
+        $.ajax({
+            type:'POST',
+            url:"/cgi-bin/category.py?type=getbyparent&parent="+pid,
+            dataType:"json",
+            async:false,    
+            success:function(data){
+                if(data && data.status == '0'){
+                    _initOptions(data.data,html,++preLevel)
+                }   
+            },
+            error:function(){
+                alert("服务器繁忙，请稍后再试！");
+            }
+        });
+
+    }
+    function initData(){
+        var html = []
+        _initSubDom(0,html,-1);
+        $("#js_parent").append(html.join(''));
+	if(searchToParamObj()['aid']){
+		_getArticle();
+	}
+    }
+    function _initArticle(art){
+	$("#js_parent").find("option[value="+art.cid+"]").attr("selected",true);
+	$("#js_title").val(art.title);
+	$("#js_state").find("option[value="+art.state+"]").attr("selected",true);
+	$("#js_order").val(art.order);
+	$("#js_desc").val(art.desc);
+	$("js_hot").val(art.hot);
+	$("js_createDate").val(art.createDate);
+	setContent(art.content);
+    }
+    function _getArticle(){
+        $.ajax({
+            type:'POST',
+            url:"/cgi-bin/article.py?type=getbyaid&aid="+searchToParamObj()['aid'],
+            dataType:"json",
+            async:false,    
+            success:function(data){
+                if(data && data.status == '0'){
+                   _initArticle(data.data);
+                }   
+            },
+            error:function(){
+                alert("服务器繁忙，请稍后再试！");
+            }
+        });
+
+
+    }
+    function searchToParamObj(search){
+		if(!search){
+			search = window.location.search;
+		}
+
+		var obj = {};
+		if(search){
+			search = search.substring(1);
+			var searches = search.split('&');
+			for(var i = 0; i < searches.length; i++){
+				if(searches[i]){
+					var vk =  searches[i].split('=');
+					(vk.length == 2)? obj[vk[0]] = vk[1] : obj[vk[0]] = "";
+				}
+			}
+		}
+		return obj;
+    }
+    function initEvent(){
+        $("#js_submit").on("click",function(){
+            submit();
+        });
+    }   
+    (function main(){
+        initData();
+        initEvent();
+    })();
+
+});
+</script>
+</body>
+</html>
