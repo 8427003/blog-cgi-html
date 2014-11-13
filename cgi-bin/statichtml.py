@@ -27,7 +27,7 @@ path = './Cloris/article/'
 
 if not os.path.exists(path):
     os.makedirs(path)
-outf = open('%sindex3.html'%path,'w')
+outf = open('%sindex4.html'%path,'w')
 
 outf.write(result)
 outf.close()
