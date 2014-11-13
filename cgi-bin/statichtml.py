@@ -12,24 +12,23 @@
 from string import Template
 import os
 
-def static(article):
 
-    inf = open('../template/article.html','r')
+inf = open('../template/article.html','r')
 
-    txt = inf.read() 
+txt = inf.read() 
 
-    inf.close()
+inf.close()
 
-    t = Template(txt)
+t = Template(txt)
 
-    result = t.safe_substitute(hello='wwwwwwwwwwwwww')
+result = t.safe_substitute(hello='wwwwwwwwwwwwww')
 
-    path = './Cloris/article/'
+path = './Cloris/article/'
 
-    if not os.path.exists(path):
-        os.makedirs(path)
-    outf = open('%sindex.html'%path,'w')
+if not os.path.exists(path):
+    os.makedirs(path)
+outf = open('%sindex.html'%path,'w')
 
-    outf.write(result)
-    outf.close()
+outf.write(result)
+outf.close()
 
