@@ -50,17 +50,13 @@ def addInterface():
 	if _add(art) > 0:
             result = {"status":0,"message":'',"data":{}}
             print os.popen('./statichtml.py').read()
-            try:
-                print os.popen('./git.py').read()
-            except:
-                print sys.exc_info()[0]
+            print os.popen('./git.py').read()
         
                 
         else:
 		result = {"status":-1,"message":'添加失败'}
 
 	print json.dumps(result)
-
 
 def _modify(aid,art):
 	cid = r.hget("article:%s"%aid,"cid")
