@@ -16,11 +16,11 @@ def push():
 
     result = []
     os.chdir('Cloris')
-    result.push(print os.popen('git pull').read())
-    result.push(print os.popen('git status').read())
-    result.push(print os.popen('git add -A').read())
-    result.push(print os.popen('git commit -m "static html add"').read())
-    result.push(print os.popen('git status').read())
-    result.push(print os.popen('git push origin').read())
+    result.push(os.popen('git pull').read())
+    result.push(os.popen('git status').read())
+    result.push(os.popen('git add -A').read())
+    result.push(os.popen('git commit -m "static html add"').read())
+    result.push(os.popen('git status').read())
+    result.push(os.popen('git push origin').read())
     
     return result
