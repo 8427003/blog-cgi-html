@@ -2,6 +2,8 @@
 #-*-coding: utf-8 -*-
 import cgitb; cgitb.enable()
 import json
+import sys
+import cgi
 import sys import cgi
 import os
 import redis
