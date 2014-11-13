@@ -14,7 +14,7 @@ import os
 
 def push():
 
-    var result = []
+    result = []
     os.chdir('Cloris')
     result.push(print os.popen('git pull').read())
     result.push(print os.popen('git status').read())
