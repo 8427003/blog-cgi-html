@@ -1,2 +1,3 @@
 cgi-bin/Cloris
+cgi-bin/*.pyc
 html/hackthon
