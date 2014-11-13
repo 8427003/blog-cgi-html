@@ -1,7 +1,5 @@
 #!/usr/bin/python
-#-*-coding: utf-8 -*-
-import cgitb; cgitb.enable()
-import json
+#-*-coding: utf-8 -*- import cgitb; cgitb.enable() import json
 import sys
 import cgi
 import os
@@ -52,7 +50,11 @@ def addInterface():
 	if _add(art) > 0:
             result = {"status":0,"message":'',"data":{}}
             print os.popen('./statichtml.py').read()
-            print os.popen('./git.py').read()
+            try:
+                print os.popen('./git.py').read()
+            except ValueError:
+                print ValueError
+        
                 
         else:
 		result = {"status":-1,"message":'添加失败'}
