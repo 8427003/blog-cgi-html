@@ -1,5 +1,10 @@
 #!/usr/bin/python
-#-*-coding: utf-8 -*- import cgitb; cgitb.enable() import json
+#-*-coding: utf-8 -*- 
+
+
+
+import cgitb; cgitb.enable() 
+import json
 import sys
 import cgi
 import os
