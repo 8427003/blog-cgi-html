@@ -15,10 +15,10 @@ import os
 
 result = []
 os.chdir('Cloris')
-os.popen('git pull').read()
-os.popen('git status').read()
-os.popen('git add -A').read()
-os.popen('git commit -m "static html add"').read()
-os.popen('git status').read()
-os.popen('git push origin').read()
+print os.popen('git pull').read()
+print os.popen('git status').read()
+print os.popen('git add -A').read()
+print os.popen('git commit -m "static html add"').read()
+print os.popen('git status').read()
+print os.popen('git push origin').read()
   
