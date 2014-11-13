@@ -22,4 +22,3 @@ result.push(os.popen('git commit -m "static html add"').read())
 result.push(os.popen('git status').read())
 result.push(os.popen('git push origin').read())
   
-return result
