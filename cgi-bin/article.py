@@ -4,7 +4,6 @@ import cgitb; cgitb.enable()
 import json
 import sys
 import cgi
-import sys import cgi
 import os
 import redis
 import statichtml
