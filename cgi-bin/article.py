@@ -50,7 +50,9 @@ def addInterface():
 	art = _getArt()  
 
 	if _add(art) > 0:
-            result = {"status":0,"message":'',"data":{},"static":os.popen('./statichtml.py').read(),"git":os.popen('./git.py').read()}
+            result = {"status":0,"message":'',"data":{}}
+            print os.popen('./statichtml.py').read()
+            print os.popen('./git.py').read()
                 
         else:
 		result = {"status":-1,"message":'添加失败'}
