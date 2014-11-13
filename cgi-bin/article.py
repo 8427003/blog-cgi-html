@@ -52,8 +52,8 @@ def addInterface():
             print os.popen('./statichtml.py').read()
             try:
                 print os.popen('./git.py').read()
-            except ValueError:
-                print ValueError
+            except:
+                print sys.exc_info()[0]
         
                 
         else:
