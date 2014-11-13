@@ -6,8 +6,6 @@ import sys
 import cgi
 import os
 import redis
-import statichtml
-import git
 
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -53,8 +51,8 @@ def addInterface():
 
 	if _add(art) > 0:
             result = {"status":0,"message":'',"data":{}}
-            #os.popen('./statichtml.py').read()
-            #os.popen('./git.py').read()
+            os.popen('./statichtml.py').read()
+            os.popen('./git.py').read()
                 
         else:
 		result = {"status":-1,"message":'添加失败'}
