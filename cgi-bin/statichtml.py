@@ -13,22 +13,26 @@ from string import Template
 import os
 
 
-inf = open('../template/article.html','r')
+def staticHtml(article):
 
-txt = inf.read() 
+    inf = open('../template/article.html','r')
 
-inf.close()
+    txt = inf.read() 
 
-t = Template(txt)
+    inf.close()
 
-result = t.safe_substitute(hello='wwwwwwwwwwwwww')
+    t = Template(txt)
 
-path = './Cloris/article/'
+    result = t.safe_substitute(hello='wwwwwwwwwwwwww')
 
-if not os.path.exists(path):
-    os.makedirs(path)
-outf = open('%sindex4.html'%path,'w')
+    path = './Cloris/article/%s/'%article.cid
 
-outf.write(result)
-outf.close()
+    if not os.path.exists(path):
+        os.makedirs(path)
 
+    outf = open('%sarticle.createDate'%path,'w')
+    outf.write(result)
+    outf.close()
+    
+    staticFileName = 'article/%s/%s'%(article.cid,article.createDate)
+    return staticFileName 
