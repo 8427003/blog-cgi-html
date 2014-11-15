@@ -9,6 +9,9 @@
 """
 
 """
+import thread
+import os
+import time
 from gittle import Gittle
 
 repo = Gittle('./Cloris','git@github.com:8427003/Cloris.git')
@@ -18,10 +21,11 @@ key_file.close()
 #repo.auth(username="8427003",password="lijun401338")
 
 def push(filename):
+    thread.start_new_thread(threadPush,(filename,))
+    time.sleep(10)
+
+def threadPush(filename):
     repo.pull()
     repo.stage(filename)
     repo.commit(name="8427003", email="8427003@qq.com", message="auto static html")
     repo.push()
-
-    return 'ok'
-
