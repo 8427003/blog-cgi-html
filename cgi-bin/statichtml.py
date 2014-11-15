@@ -13,8 +13,12 @@ from string import Template
 import os
 
 
-def staticHtml(article):
+def staticHtml(art):
 
+    #article = {"cid":111,"createDate":23123123}
+    article = {}
+    article["createDate"] = str(art["createDate"])
+    article["cid"] = str(art["cid"])
     inf = open('../template/article.html','r')
 
     txt = inf.read() 
@@ -24,13 +28,13 @@ def staticHtml(article):
     t = Template(txt)
 
     result = t.safe_substitute(hello='wwwwwwwwwwwwww')
-    path = './Cloris/article/%s/'%article.cid
+    path = './Cloris/article/c%s/'%article["cid"]
     if not os.path.exists(path):
         os.makedirs(path)
 
-    outf = open('%sarticle.createDate'%path,'w')
+    outf = open('%s%s.html'%(path,article["createDate"]),'w')
     outf.write(result)
     outf.close()
     
-    staticFileName = 'article/%s/%s'%(article.cid,article.createDate)
+    staticFileName = 'article/c%s/%s.html'%(article["cid"],article["createDate"])
     return staticFileName 
