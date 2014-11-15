@@ -47,6 +47,11 @@ def _getArt():
 def _add(art):
 	aid = r.incr("aid")
 	art["id"] = aid
+
+        staticFileName =  statichtml.staticHtml(art)
+        art["staticFileName"] = staticFileName
+
+        mygit.push(staticFileName)
 	r.sadd("categoryAids:%s"%art["cid"],aid)	
 	return r.hmset("article:%s"%aid,art)
 
@@ -56,11 +61,6 @@ def addInterface():
 
 	if _add(art) > 0:
             result = {"status":0,"message":'',"data":{}}
-                
-            staticFileName =  statichtml.staticHtml(art)
-
-            mygit.push(staticFileName)
-            
         else:
 		result = {"status":-1,"message":'添加失败'}
 
