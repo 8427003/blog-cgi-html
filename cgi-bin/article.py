@@ -96,7 +96,8 @@ def getByCidInterface(cid,callback):
 	articles = []
 	for aid in aids:
 		art = r.hgetall("article:%s"%aid)
-#		art["content"] = "" 
+		if cid != "0":
+		    art["content"] = "" 
 		articles.append(art);
 				
 	result = {"status":0,"data":articles}
