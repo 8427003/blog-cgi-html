@@ -69,6 +69,10 @@ def addInterface():
 def _modify(aid,art):
 	cid = r.hget("article:%s"%aid,"cid")
 	
+        staticFileName =  statichtml.staticHtml(art)
+        art["staticFileName"] = staticFileName
+
+        mygit.push(staticFileName)
 	if cid != art["cid"]:
 		r.smove("categoryAids:%s"%cid,"categoryAids:%s"%art["cid"],aid)	
 
@@ -92,6 +96,7 @@ def getByCidInterface(cid,callback):
 	articles = []
 	for aid in aids:
 		art = r.hgetall("article:%s"%aid)
+#		art["content"] = "" 
 		articles.append(art);
 				
 	result = {"status":0,"data":articles}
