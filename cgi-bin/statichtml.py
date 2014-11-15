@@ -27,7 +27,7 @@ def staticHtml(art):
 
     t = Template(txt)
 
-    result = t.safe_substitute(hello='wwwwwwwwwwwwww')
+    result = t.safe_substitute(title=art["title"],content=art["content"])
     path = './Cloris/article/c%s/'%article["cid"]
     if not os.path.exists(path):
         os.makedirs(path)

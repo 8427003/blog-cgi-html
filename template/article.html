@@ -1,10 +1,135 @@
 <!DOCTYPE html>
 <html>
-	<head>
-        <meta charset="utf-8" />
-		<title>article</title>
-	</head>
-	<body>
-	    ${{hello}}	
-	</body>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Cloris.Org 技术Blog-${title}</title>
+<meta name="description" content="${title}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="keywords" content="cloris.org,cocoo.li,8427003,去哪儿网前端工程师,${title}">
+<link href="css/normalize.css" rel="stylesheet">
+<link href="css/new-index.css" rel="stylesheet">
+</head>
+<body>
+	<header class="m-logo">
+		<div class="logo"><a href="/">cloris.org</a></div>
+	</header>
+	<div class="menu-toggle"></div>
+	<nav class="m-nav none">
+		<div class="panel" id="js-category">
+			
+			
+		</div>
+		
+	</nav>
+	<main>
+		<div class="m-article" id="js-articles">
+			<article>
+				<header class="m-title">
+                    <h1 class="title">${title}</h1>
+				</header>
+
+				<div class="m-content">
+                    ${content}
+				</div>
+			</article>
+		</div>	
+		
+	</main>
+    <script src="js/jquery.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		function _getArticleByCid(cid){
+			
+				$.ajax({
+					type:'GET',
+					url:"http://182.92.181.217:8080/cgi-bin/article.py?type=getbycid&cid="+cid,
+					dataType:"jsonp",
+					async:false,	
+					success:function(data){
+						if(data && data.status == '0'){
+							_initArticles(data.data);
+						}	
+					},
+					error:function(){
+						alert("服务器繁忙，请稍后再试！");
+					}
+				});
+			}
+			function _initArticles(list){
+				var html = []
+				html.push('<article>')
+				html.push('<header class="m-title">');
+				html.push('<h1 class="title">Content</h1>');
+				html.push('</header>');
+					html.push('<div class="m-content">');
+					for(var index in list){
+						html.push('<p data-id="'+list[index].id+'"><a href="/'+list[index].staticFileName+'">'+list[index].title+'</a></br><span>'+list[index].desc+'</span></p>');
+							
+					}
+				html.push('</div></article>');
+				$("#js-articles").html(html.join(''));
+			}
+			function _initLeftBar(list,html){
+				var html = html || [];	
+				var list = list || [];
+				html.push('<ul class="menu">');
+				html.push('<li><a href="/" data-id="0">HOME</a></li>');
+				for(var i = 0; i < list.length; i++){
+						html.push('<li><a href="javascript:;" data-id="'+list[i].id+'">'+list[i].name+'</a></li>');
+						var children = list[i].children;
+						if(children.length > 0){
+							html.push('<ul class="children">');
+							for(var k = 0; k < children.length; k ++){
+								html.push('<li><a href="javascript:;" data-id="'+list[k].id+'">'+list[k].name+'</a></li>');
+							}
+							html.push('</ul>');
+						}
+				}
+				html.push('</ul>');
+			}
+			function _initCategory(pid,html){
+			 	$.ajax({
+					type:'GET',
+					url:"http://182.92.181.217:8080/cgi-bin/category.py?type=getallbyparent&parent="+pid,
+					dataType:"jsonp",
+					async:false,	
+					success:function(data){
+						if(data && data.status == '0'){
+							_initLeftBar(data.data,html);
+
+							$("#js-category").html(html.join(""));
+						}	
+					}, 
+					error:function(){
+						alert("服务器繁忙，请稍后再试！");
+					}
+				});
+	
+			}
+
+			function initEvent(){
+				$("#js-category").delegate("li a","click",function(){
+					var cid = $(this).attr('data-id');
+					_getArticleByCid(cid);
+					$(".menu-toggle").trigger('click');				
+				});
+				$(".menu-toggle").on('click',function(){
+					if($(this).hasClass('toggle-pc-show')){
+						$(this).removeClass('toggle-pc-show');
+						$('.m-nav').addClass('none');
+					}else{
+						$(this).addClass('toggle-pc-show');
+						$('.m-nav').removeClass('none');
+					}
+				});
+					
+			}
+			var html = [];
+			// _getArticleByCid(0);
+			_initCategory(0,html)
+			initEvent();
+    	});
+    </script>
+</body>
 </html>
