@@ -14,7 +14,7 @@ import os
 import time
 from gittle import Gittle
 
-repo = Gittle('./Cloris','git@github.com:8427003/Cloris.git')
+repo = Gittle('./8427003.github.io','git@github.com:8427003/8427003.github.io.git')
 key_file = open('/home/lijun/.ssh/id_rsa')
 repo.auth(pkey=key_file)
 key_file.close()
