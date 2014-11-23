@@ -11,6 +11,7 @@ import os
 import redis
 import statichtml
 import mygit
+import delStaticFile
 
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
@@ -69,10 +70,6 @@ def addInterface():
 def _modify(aid,art):
 	cid = r.hget("article:%s"%aid,"cid")
 	
-        staticFileName =  statichtml.staticHtml(art)
-        art["staticFileName"] = staticFileName
-
-        mygit.push(staticFileName)
 	if cid != art["cid"]:
 		r.smove("categoryAids:%s"%cid,"categoryAids:%s"%art["cid"],aid)	
 
@@ -83,6 +80,11 @@ def modifyInterface(aid):
 	art = _getArt()  
 
 	if _modify(aid,art) > 0:
+	        sfname = r.hget("article:%s"%aid,"staticFileName")
+                delStaticFile.del(sfname)
+                staticFileName =  statichtml.staticHtml(art)
+                art["staticFileName"] = staticFileName
+                mygit.push(staticFileName)
 		result = {"status":0,"message":'',"data":{}}
 	else:
 		result = {"status":-1,"message":'修改失败'}

@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 # vim:fenc=utf-8
-#
-# Copyright © 2014 coco <coco@coco-virtual-machine>
-#
+# # Copyright © 2014 coco <coco@coco-virtual-machine> #
 # Distributed under terms of the MIT license.
 
 """
@@ -18,7 +16,6 @@ sys.setdefaultencoding('utf-8')
 
 def staticHtml(art):
 
-    #article = {"cid":111,"createDate":23123123}
     article = {}
     article["createDate"] = str(art["createDate"])
     article["cid"] = str(art["cid"])
