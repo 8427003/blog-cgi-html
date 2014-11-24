@@ -24,8 +24,9 @@ def push(filename):
     time.sleep(15)
 
 def _push(filename):
-    repo.pull()
-    repo.stage(filename)
+    #repo.pull()
+    if filename:
+    	repo.stage(filename)
     repo.commit(name="8427003", email="8427003@qq.com", message="auto static html")
     repo.push()
     os._exit(0)

@@ -9,6 +9,7 @@
 """
 import os
 
-def del(fileName):
-    os.chdir('./8427003.github.io')
-    os.popen('rm -rf %s'%fileName)
+def delete(fileName):
+	basepath = './8427003.github.io/'
+	if fileName:
+	    os.popen('rm -rf %s%s'%(basepath,fileName),'w')
