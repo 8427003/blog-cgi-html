@@ -9,6 +9,8 @@
 <meta name="keywords" content="cloris.org,cocoo.li,8427003,去哪儿网前端工程师,${title}">
 <link href="/css/normalize.css" rel="stylesheet">
 <link href="/css/new-index.css" rel="stylesheet">
+<link href="/plugs/syntaxhighlighter/styles/shCore.css" rel="stylesheet" />
+<link href="/plugs/syntaxhighlighter/styles/shThemeFadeToGrey.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 	<header class="m-logo">
@@ -37,6 +39,37 @@
 		
 	</main>
     <script src="/js/jquery.js"></script>
+    <script src="/plugs/syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="/plugs/syntaxhighlighter/scripts/shAutoloader.js" type="text/javascript"></script>
+    <script>
+        SyntaxHighlighter.autoloader(
+	'applescript			../scripts/shBrushAppleScript.js',
+	'actionscript3 as3		../scripts/shBrushAS3.js',
+	'bash shell				../scripts/shBrushBash.js',
+	'coldfusion cf			../scripts/shBrushColdFusion.js',
+	'cpp c					../scripts/shBrushCpp.js',
+	'c# c-sharp csharp		../scripts/shBrushCSharp.js',
+	'css					../scripts/shBrushCss.js',
+	'delphi pascal			../scripts/shBrushDelphi.js',
+	'diff patch pas			../scripts/shBrushDiff.js',
+	'erl erlang				../scripts/shBrushErlang.js',
+	'groovy					../scripts/shBrushGroovy.js',
+	'haxe hx				../scripts/shBrushHaxe.js',
+	'java					../scripts/shBrushJava.js',
+	'jfx javafx				../scripts/shBrushJavaFX.js',
+	'js jscript javascript	../scripts/shBrushJScript.js',
+	'perl pl				../scripts/shBrushPerl.js',
+	'php					../scripts/shBrushPhp.js',
+	'text plain				../scripts/shBrushPlain.js',
+	'py python				../scripts/shBrushPython.js',
+	'ruby rails ror rb		../scripts/shBrushRuby.js',
+	'scala					../scripts/shBrushScala.js',
+	'sql					../scripts/shBrushSql.js',
+	'vb vbnet				../scripts/shBrushVb.js',
+	'xml xhtml xslt html	../scripts/shBrushXml.js'
+);
+SyntaxHighlighter.all();
+    </script>
     <script type="text/javascript">
     	$(function(){
     		function _getArticleByCid(cid){
@@ -131,5 +164,6 @@
 			initEvent();
     	});
     </script>
+
 </body>
 </html>
