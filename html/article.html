@@ -12,8 +12,27 @@
     <script type="text/javascript" charset="utf-8" src="plugs/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="plugs/ueditor/ueditor.all.min.js"></script>
     <script type="text/javascript" src="plugs/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <style>
+        .mask{
+            opacity:.7;
+            background:black;
+            position:fixed;
+            top:0;
+            right:0;
+            left:0;
+            z-index:9999;
+            bottom:0;
+        }
+        .mask img{
+            position:absolute;
+            left:50%;
+            top:50%;
+            width: 70px;
+        }
+    </style>
 </head>
 <body>
+    <div class="mask" style="display:none;"><img src="css/loading.gif"></div>
 <div class="container">
 <div class="row">
 	<div class="col-md-4">
@@ -114,9 +133,9 @@ $(function(){
     function submit(){
         var data = _getFormData();
 	var aid = searchToParamObj()['aid'];
-	var url = (aid)? "/cgi-bin/article.py?type=modify&aid="+aid : "/cgi-bin/article.py?type=add"
+	var url = (aid)? "/cgi-bin/article.py?type=modify&aid="+aid : "/cgi-bin/article.py?type=add";
 		 
-
+        $('.mask').css('display','block');
         $.ajax({
             type:'POST',
             url:url,
@@ -124,15 +143,17 @@ $(function(){
             dataType:"json",
             success:function(data){
                 if(data && data.status == '0'){
-			if(aid){
+			         if(aid){
                     		alert("修改成功！");
-			}else{
-				alert("添加成功!");
-			}
+			         }else{
+				        alert("添加成功!");
+			         }
                 }
+                $('.mask').css('display','none');
             },
             error:function(){
                 alert("服务器繁忙，请稍后再试！");
+                 $('.mask').css('display','none');
             }
         });
     }
